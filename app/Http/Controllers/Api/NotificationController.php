@@ -18,7 +18,6 @@ use Kreait\Laravel\Firebase\Facades\Firebase;
  * description="FCM & APNs Token Management - AUTH REMOVED",
  * @OA\Contact(email="admin@example.com")
  * )
- * @OA\Server(url=L5_SWAGGER_CONST_HOST)
  */
 class NotificationController extends Controller
 {

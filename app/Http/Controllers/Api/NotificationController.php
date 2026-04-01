@@ -84,11 +84,7 @@ class NotificationController extends Controller
      */
     public function sendPush(Request $request)
     {
-        $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'title'   => 'required|string',
-            'body'    => 'required|string',
-        ]);
+
 
         $tokens = DeviceToken::where('user_id', $request->user_id)->pluck('token')->toArray();
 

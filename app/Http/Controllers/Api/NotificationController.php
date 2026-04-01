@@ -93,20 +93,17 @@ class NotificationController extends Controller
         }
 
         try {
-            $messaging = Firebase::messaging();
-            $message = CloudMessage::new()
-                ->withNotification(Notification::create($request->title, $request->body))
-                ->withData($request->data ?? []);
+            $messaging = \Kreait\Laravel\Firebase\Facades\Firebase::messaging();
+
+            $message = \Kreait\Firebase\Messaging\CloudMessage::new()
+                ->withNotification(\Kreait\Firebase\Messaging\Notification::create($request->title, $request->body));
 
             $report = $messaging->sendMulticast($message, $tokens);
 
-            if ($report->hasFailures()) {
-                foreach ($report->failures()->getItems() as $failure) {
-                    DeviceToken::where('token', $failure->target()->value())->delete();
-                }
-            }
-
-            return response()->json(['success' => true, 'sent' => $report->successes()->count()]);
+            return response()->json([
+                'success' => true,
+                'delivered' => $report->successes()->count()
+            ]);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
